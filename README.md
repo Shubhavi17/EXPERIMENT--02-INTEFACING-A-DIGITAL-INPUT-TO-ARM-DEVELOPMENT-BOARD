@@ -1,4 +1,7 @@
-# EXPERIMENT--02-INTEFACING-A-DIGITAL-INPUT-TO-ARM-DEVELOPMENT-BOARD
+# EXPERIMENT 02 INTEFACING A DIGITAL INPUT TO ARM DEVELOPMENT  BOARD
+## NAME: SHUBHAVI M
+## ROLL NO:21223040199
+## DATE OF EXPERIMENT: 06.05.2025
 ## Aim: To Interface a Digital Input  (userpush button  ) to ARM   development board and write a  program to obtain  the data and flash the led  
 ## Components required: STM32 CUBE IDE, ARM IOT development board,  STM programmer tool.
 ## Theory 
@@ -54,27 +57,26 @@ The full form of an ARM is an advanced reduced instruction set computer (RISC) m
 ```
 #include "main.h"
 #include<stdbool.h>
-void push_button();
 bool button_status;
-
+void led();
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 
 int main(void)
 {
-    HAL_Init();
-    SystemClock_Config();
-    MX_GPIO_Init();
- while (1)
+  HAL_Init();
+  SystemClock_Config();
+  MX_GPIO_Init();
+  while (1)
   {
-	  push_button();
-  }
+    led();
   }
 
-void push_button()
+}
+void led()
 {
-	button_status=HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
-	if(button_status==0)
+	button_status=HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13);
+	if (button_status==0)
 	{
 		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_SET);
 	}
@@ -82,28 +84,28 @@ void push_button()
 	{
 		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_RESET);
 	}
+	HAL_Delay(500);
 }
-
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
+  HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1);
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSIDiv = RCC_HSI_DIV1;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
+
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+                              |RCC_CLOCKTYPE_PCLK1;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
   {
@@ -114,41 +116,58 @@ void SystemClock_Config(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+
+ 
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+
+  
   GPIO_InitStruct.Pin = GPIO_PIN_13;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  
   GPIO_InitStruct.Pin = GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
 }
+
+
 void Error_Handler(void)
 {
+  
   __disable_irq();
   while (1)
   {
   }
+  
 }
+
 #ifdef  USE_FULL_ASSERT
+
 void assert_failed(uint8_t *file, uint32_t line)
 {
+  
 }
-#endif
+#endif 
+
 ```
 
 
 
 ## Output  :
-![Screenshot 2025-03-25 113620](https://github.com/user-attachments/assets/584bd378-c0db-45d5-a774-c9539c9488c2)
-![Screenshot 2025-03-25 113639](https://github.com/user-attachments/assets/5c7a0010-a95d-4aa2-ace3-8a5af8f213f4)
- 
-## layout of the circuit 
- ![Screenshot 2025-03-25 114024](https://github.com/user-attachments/assets/27ea449c-1450-483f-9ec7-d09c3a90593b)
+## LED OFF
+![WhatsApp Image 2025-05-06 at 10 55 48_9b58a1b4](https://github.com/user-attachments/assets/38acbb13-4c04-4d3b-b65e-cedf21aea34b)
+
+
+## LED ON
+![WhatsApp Image 2025-05-06 at 10 55 49_d2c44b38](https://github.com/user-attachments/assets/80117da0-2b4c-4d8a-a352-b7f6b765259c)
 
  
 ## Result :
